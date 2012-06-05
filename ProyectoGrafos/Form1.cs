@@ -1,15 +1,22 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace ProyectoGrafos
 {
     public partial class Form1 : Form
 
     {
-        private readonly Random _ejeX = new Random((int) (DateTime.Now.Ticks));
-        private readonly Random _ejeY = new Random(((int) DateTime.Now.Ticks));
+        #region Declaracion de Variables
+
+        //private readonly int[] _ejeX = {99, 452, 99, 452, 208, 328, 208, 328};
+        //private readonly int[] _ejeY = {113, 96, 195, 195, 266, 26, 52, 303};
+        private readonly int[] _ejeX = {31, 170, 357, 507, 468, 335, 195, 75};
+        private readonly int[] _ejeY = {132, 55, 34, 102, 256, 320, 320, 267};
 
         private readonly char[] _idNodo = {
                                               'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
@@ -17,64 +24,182 @@ namespace ProyectoGrafos
                                               'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
                                           };
 
-        private readonly int[] ejeX = {99, 452, 99, 452, 208, 328, 208, 328};
-        private readonly int[] ejeY = {113, 96, 195, 195, 266, 26, 52, 303};
-
+        public int FinX;
+        public int FinY;
+        public int[,] Matriz;
+        public int OrigenX;
+        public int OrigenY;
         private int _cantidadNodos = 1;
-        public int finX;
-        public int finY;
-        public int origenX;
-        public int origenY;
+
+        #endregion
 
         public Form1()
         {
+            Matriz = new int[8,8];
             InitializeComponent();
+            MouseMove += Form1MouseMove;
         }
 
-        private void Button1Click(object sender, EventArgs e)
+        #region Funciones necesarias para mover la ventana sin barra de titulo [Jose Sosa]
+
+        //
+        // Declaraciones del API de Windows (y constantes usadas para mover el form)
+        //
+        private const int WM_SYSCOMMAND = 0x112;
+        private const int MOUSE_MOVE = 0xF012;
+        //
+        // Declaraciones del API
+        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+        private static extern void ReleaseCapture();
+
+
+        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
+        private static extern void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
+
+        // función privada usada para mover el formulario actual
+        private void MoverForm()
         {
-            int auxX = 6;
-            int auxY = 14;
+            ReleaseCapture();
+            SendMessage(Handle, WM_SYSCOMMAND, MOUSE_MOVE, 0);
+        }
 
-            for (int i = 0; i < _cantidadNodos; i++)
+
+        private void Form1MouseMove(object sender, MouseEventArgs e)
+        {
+            MoverForm();
+        }
+
+        private void BtnCerrarClick1(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        #endregion
+
+        private void LimpiarPanel()
+        {
+            for (int i = 0; i < 6; i++)
+                foreach (object control in panel1.Controls)
+                {
+                    var botones = control as Button;
+                    if (botones != null)
+                        if (botones.Name.Contains("nodo"))
+                        {
+                            panel1.Controls.Remove(botones); //Elimina todos los contrles tipo boton en el Panel
+                        }
+                }
+            panel1.Refresh();
+        }
+
+        private void DibujarLinea(float origenX, float origenY, float finX, float finY)
+        {
+            var pen = new Pen(Color.FromArgb(255, 158, 30, 57), 4)
+                          {/*StartCap = LineCap.ArrowAnchor,*/EndCap = LineCap.DiamondAnchor};
+            Graphics g = panel1.CreateGraphics();
+            g.DrawLine(pen, origenX, origenY, finX, finY);
+        }
+
+        public void DibujarArco(float x, float y, float width, float height, float inicio, float curvatura)
+        {
+            var pen = new Pen(Color.FromArgb(255, 30, 129, 158), 5)
+                          {StartCap = LineCap.DiamondAnchor, /* EndCap = LineCap.Triangle/*ArrowAnchor*/};
+            Graphics g = panel1.CreateGraphics();
+            g.DrawArc(pen, x, y, width, height, inicio, curvatura);
+        }
+
+        private void GuardarGrafo()
+        {
+            SendKeys.SendWait("%{PRTSC}");
+            IDataObject d = Clipboard.GetDataObject();
+            var guardar = new SaveFileDialog
+                              {
+                                  Filter = @"Imagenes JPG|*.jpg|Imagen de Mapa de Bits|*.bmp|Imagenes Gif|*.gif",
+                                  Title = @"Guardar la captura del Grafo",
+                                  RestoreDirectory = true
+                              };
+            switch (guardar.ShowDialog())
             {
-                int x = _ejeX.Next(6, 472);
-                int y = _ejeY.Next(14, 353);
-                textBox1.Text = x.ToString();
-                textBox2.Text = y.ToString();
-                button1.SendToBack();
-                var nodo = new Button
-                               {
-                                   Name = "nodo" + i,
-                                   Size = new Size(25, 25),
-                                   Location = new Point(x, y),
-                                   Text = _idNodo[i].ToString(),
-                                   //Z-Index.sendToBack();
-                               };
+                case DialogResult.OK:
+                    {
+                        string ruta = guardar.FileName;
 
-
-                if (i == 0 || i%2 == 0)
-                {
-                    origenX = x;
-                    origenY = y;
-                }
-                else
-                {
-                    finX = x;
-                    finY = y;
-                    DibujarArco(origenX, origenY, finX, finY);
-                }
-            
-                if (nodo.Bounds.IntersectsWith(nodo.Bounds))
-                {
-                    //si pasa por aqui hay colision
-                    textBox1.Text = "colision!!";
-                }
-                // var nodo = new Button {Name = "nodo" + i, Size = new Size(25, 25), Location = new Point(x, y), Text = _idNodo[i].ToString()};
-                panel1.Controls.Add(nodo);
+                        try
+                        {
+                            if (d == null || !d.GetDataPresent(DataFormats.Bitmap)) return;
+                            var b = (Bitmap) d.GetData(DataFormats.Bitmap);
+                            b.Save(ruta);
+                            MessageBox.Show(
+                                @"Archivo Guardado Exitosamente\r\n" + @"En: "+ruta+@" " + @"Se limpiara el panel para crear un nuevo grafo",
+                                @"Grafonator - Guardar Grafo",
+                                MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                            LimpiarPanel();
+                        }
+                        catch (Exception mensaje)
+                        {
+                            LimpiarPanel();
+                            MessageBox.Show(@"Error" + mensaje, @"Grafonator - Guardar Grafo",
+                                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    break;
             }
         }
 
+        private void CrearGrafo(int columna)
+        {
+            for (int i = 0; i < _cantidadNodos; i++)
+            {
+                for (int j = 0; j < _cantidadNodos; j++)
+                {
+                    if ((string) dataGridView[i, j].Value!="0")
+                    {
+                        dataGridView[i, j].Value = "1"; 
+                    }
+                    
+                }
+            }
+
+            for (int i = 0; i < _cantidadNodos; i++)
+            {
+                for (int j = 0; j < _cantidadNodos; j++)
+                {
+                    int asignarValoresMatriz = Convert.ToInt16(dataGridView[i, j].Value);
+                    Matriz[i, j] = asignarValoresMatriz;
+                }
+            }
+            /*Lineas que parten desde el Nodo 
+             * a|b|c|d|e|f|g|h Se tomara una columna a columna 
+             *a0|0|0|0|0|0|0|0 Y de cada una de ellas todas sus filas
+             *b0|0|0|0|0|0|0|0 De esta manera se podra determinar
+             *c0|0|0|0|0|0|0|0 cual sera el nodo de destino, comparando
+             *d0|0|0|0|0|0|0|0 aquellas posiciones de la matriz que
+             *e0|0|0|0|0|0|0|0 tengan como valor 1.
+             *f0|0|0|0|0|0|0|0
+             *g0|0|0|0|0|0|0|0
+             *h0|0|0|0|0|0|0|0                      
+             */
+           
+            OrigenX = _ejeX[columna];
+            OrigenY = _ejeY[columna];
+
+            for (int i = 0; i < _cantidadNodos; i++)
+            {
+                var colocarNodos = new Nodos();
+                panel1.Controls.Add(colocarNodos.CrearNodoN(i, _ejeX[i], _ejeY[i]));
+                //Crear las lineas curvas que apuntan al mismo nodo de origen
+                if (columna == i && Matriz[columna,i]==1)
+                {
+                    DibujarArco(OrigenX - 50, OrigenY, 100, 40, 120, 180);
+                }
+                else
+                //Crea las lineas desde el nodo origen hasta el nodo destino
+                if (Matriz[columna,i]==1)
+                {
+                    DibujarLinea(OrigenX+30, OrigenY+30, _ejeX[i], _ejeY[i]-5);
+                }
+            }
+        }
+        
         private void NumericUpDown1ValueChanged(object sender, EventArgs e)
         {
             _cantidadNodos = (int) numericUpDown1.Value;
@@ -82,191 +207,75 @@ namespace ProyectoGrafos
             dataGridView.ColumnCount = _cantidadNodos;
             for (int i = 0; i < _cantidadNodos; i++)
             {
-                dataGridView.Columns[i].Width = 25; //Se le coloca un ancho de 35 a cada columna que se va creando
+                dataGridView.Columns[i].Width = 25; //Se le coloca un ancho de 25 a cada columna que se va creando
             }
 
             for (int i = 0; i < _cantidadNodos; i++)
             {
                 for (int j = 0; j < _cantidadNodos; j++)
                 {
-                    dataGridView[i, j].Value = "";
+                    dataGridView[i, j].Value = "0";
+                }
+            }
+           
+        }
+
+        private void Button2Click(object sender, EventArgs e)
+        {
+            var graficarNodo = new Nodos();
+            for (int i = 0; i < _cantidadNodos; i++)
+            {
+                panel1.Controls.Add(graficarNodo.CrearNodoN(i, _ejeX[i], _ejeY[i]));
+                for (int j = 0; j < _cantidadNodos; j++)
+                {
+                    DibujarArco(_ejeX[i] - 50, _ejeY[i], 100, 40, 120, 180);
+
+                    for (int k = 0; k <= 7; k++)
+                    {
+                        DibujarLinea(_ejeX[i], _ejeY[i] + 10, _ejeX[i + 1], _ejeY[i + 1]);
+                    }
                 }
             }
         }
 
-
-        private void DibujarArco(float origenX, float origenY, float finX, float finY)
+        private void BtnNuevoGrafoClick(object sender, EventArgs e)
         {
-            var pen = new Pen(Color.FromArgb(255, 0, 0, 255), 2)
-                          {StartCap = LineCap.ArrowAnchor, EndCap = LineCap.RoundAnchor};
-            Graphics g = panel1.CreateGraphics();
-            g.DrawLine(pen, origenX, origenY, finX, finY);
+            LimpiarPanel();
         }
 
-        public void DibujarArcos(float X, float Y, float width,float height,float inicio,float curvatura)
+        private void BtnMinimizarClick(object sender, EventArgs e)
         {
-            var pen = new Pen(Color.FromArgb(255, 0, 0, 255), 2)
-                          {StartCap = LineCap.ArrowAnchor, EndCap = LineCap.RoundAnchor};
-            Graphics g = panel1.CreateGraphics();
-           g.DrawArc(pen,  X, Y, width,height,inicio,curvatura);
+            WindowState = FormWindowState.Minimized;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void BtnCerrarClick(object sender, EventArgs e)
         {
-            Form grafo = new Form2();
-            //grafo.Show();
-            for (int i = 0; i <= _cantidadNodos; i++)
-            {
-                panel1.Controls.Add(Graficar(i));
-            }
+            Close();
         }
 
-
-        public Control Graficar(int cantidadNodos)
+        private void Button1Click(object sender, EventArgs e)
         {
-            Button nodo = null;
+           GuardarGrafo();
+        }
 
-            switch (cantidadNodos)
-            {
-                case 1:
-                    nodo = new Button
-                               {
-                                   Name = "nodo1",
-                                   Size = new Size(45, 45),
-                                   Location = new Point(ejeX[0], ejeY[0]),
-                                   Text = "A",
-                                   BackColor = Color.DeepPink,
-                                   ForeColor = Color.White,
-                               };
-                    nodo.SendToBack();nodo.SendToBack();
-                    break;
+        private void LinkLabel1LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+           
+            Process.Start(e.Link.LinkData.ToString());
+        }
 
-
-                case 2:
-                    nodo = new Button
-                               {
-                                   Name = "nodo2",
-                                   Size = new Size(45, 45),
-                                   Location = new Point(ejeX[1], ejeY[1]),
-                                   Text = "B",
-                                   BackColor = Color.DeepPink,
-                                   ForeColor = Color.White,
-                               };
-                    nodo.SendToBack();
-                    break;
-
-                case 3:
-                    nodo = new Button
-                               {
-                                   Name = "nodo3",
-                                   Size = new Size(45, 45),
-                                   Location = new Point(ejeX[2], ejeY[2]),
-                                   Text = "C",
-                                   BackColor = Color.DeepPink,
-                                   ForeColor = Color.White,
-                               };
-                    nodo.SendToBack();nodo.SendToBack();
-                    break;
-
-                case 4:
-                    nodo = new Button
-                               {
-                                   Name = "nodo4",
-                                   Size = new Size(45, 45),
-                                   Location = new Point(ejeX[3], ejeY[3]),
-                                   Text = "D",
-                                   BackColor = Color.DeepPink,
-                                   ForeColor = Color.White,
-                               };
-                    nodo.SendToBack();nodo.SendToBack();
-                    break;
-
-                case 5:
-                    nodo = new Button
-                               {
-                                   Name = "nodo5",
-                                   Size = new Size(45, 45),
-                                   Location = new Point(ejeX[4], ejeY[4]),
-                                   Text = "E",
-                                   BackColor = Color.DeepPink,
-                                   ForeColor = Color.White,
-                               };
-                    nodo.SendToBack();nodo.SendToBack();
-                    break;
-
-                case 6:
-                    nodo = new Button
-                               {
-                                   Name = "nodo6",
-                                   Size = new Size(45, 45),
-                                   Location = new Point(ejeX[5], ejeY[5]),
-                                   Text = "F",
-                                   BackColor = Color.DeepPink,
-                                   ForeColor = Color.White,
-                               };
-                    nodo.SendToBack();nodo.SendToBack();
-                    break;
-
-                case 7:
-                    nodo = new Button
-                               {
-                                   Name = "nodo7",
-                                   Size = new Size(45, 45),
-                                   Location = new Point(ejeX[6], ejeY[6]),
-                                   Text = "G",
-                                   BackColor = Color.DeepPink,
-                                   ForeColor = Color.White,
-                               };
-                    nodo.SendToBack();nodo.SendToBack();
-                    break;
-
-                case 8:
-                    nodo = new Button
-                               {
-                                   Name = "nodo8",
-                                   Size = new Size(45, 45),
-                                   Location = new Point(ejeX[7], ejeY[7]),
-                                   Text = "H",
-                                   BackColor = Color.DeepPink,
-                                   ForeColor = Color.White,
-                               };
-                    nodo.SendToBack();nodo.SendToBack();
-                    break;
-            }
-            return nodo;
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+            linkLabel1.Links.Add(0, 23, "https://github.com/Servtes/ProyectoGrafos-1190-10-13979");
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Form grafo = new Form2();
-            grafo.Show();
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            for (int i = 0; i <= 7;i++ )
-                DibujarArcos(ejeX[i] - 30, ejeY[i], 100, 40, ejeX[i], ejeY[i]);
-        }
-
-        private void DrawArcRectangle(/*PaintEventArgs e*/)
-        {
-            // Create pen.
-            Pen blackPen = new Pen(Color.Red, 3);
-
-            // Create rectangle to bound ellipse.
-            Rectangle rect = new Rectangle(ejeX[0]-20, ejeY[0], 50, 30);
-
-            // Create start and sweep angles on ellipse.
-            float startAngle = 45.0F;
-            float sweepAngle = 270.0F;
-            Graphics g = panel1.CreateGraphics();
-            // Draw arc to screen.
-            g.DrawArc(blackPen, rect, ejeX[0], ejeX[0]+30);
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            DrawArcRectangle();
+            for (int i = 0; i < _cantidadNodos; i++)
+            {
+                CrearGrafo(i);
+            }
+            
         }
     }
 }
