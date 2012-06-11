@@ -8,33 +8,46 @@ using System.Windows.Forms;
  * Autor: Jose Carlos Sosa Mejia 1190-10-13979
  * Fecha de Creacion: 04/06/2012
  * ********Bitacora de Cambios********
- * 04/06/12: Creacion
+ * 04/06/12: Creacion.
+ * 10/06/12: Agregados Comentarios al Codigo.
  */
 
 namespace ProyectoGrafos
 {
+    ///<summary>
+    ///Crea controles del tipo Button para la representacion de los Nodos.
+    ///</summary>
+    ///<remarks>
+    ///.
+    ///</remarks>
     public class Nodos
     {
-        public Control CrearNodoN(int cantidadNodos, int ejeX, int ejeY)
+        /// <summary>
+        /// Crear los nodos.
+        /// </summary>
+        /// <param name="numeroDeNodo">El numero de nodo a Crear.</param>
+        /// <param name="ejeX">Posicion en el eje X.</param>
+        /// <param name="ejeY">Posicion en el eje Y.</param>
+        /// <returns>El nodo en las posiciones x,y indicadas</returns>
+        public Control CrearNodoN(int numeroDeNodo, int ejeX, int ejeY)
         {
             Button nodo = null;
 
-            switch (cantidadNodos)
+            switch (numeroDeNodo)
             {
                 case 0:
                     nodo = new Button
-                               {                                    //Descripcion de las propiedades
-                                   Name = "nodo1",                   //Nombre que tendra el Control
-                                   Size = new Size(45, 45),           //Tamaño en pixeles
+                               {                                        //Descripcion de las propiedades
+                                   Name = "nodo1",                      //Nombre que tendra el Control
+                                   Size = new Size(45, 45),             //Tamaño en pixeles
                                    Location = new Point(ejeX, ejeY),    //Posicion en el Panel
-                                   Text = "A",                        //Texto que contendra
+                                   Text = "A",                          //Texto que contendra
                                    BackColor = Color.Crimson,           //Color del control
                                    ForeColor = Color.White,             //Color del Texto
                                };
                     nodo.SendToBack();//Pasa al control al fondo de todos los elementos
                     nodo.SendToBack();
                     break;
-
 
                 case 1:
                     nodo = new Button
@@ -133,6 +146,7 @@ namespace ProyectoGrafos
                     nodo.SendToBack();
                     break;
             }
+            //Tiempo de espera entre cada llamada.
             Thread.Sleep(100);
             return nodo;
         }

@@ -2,7 +2,7 @@
 
 namespace ProyectoGrafos
 {
-    partial class Form1
+    partial class GrafoNator
     {
         /// <summary>
         /// Variable del diseñador requerida.
@@ -30,6 +30,7 @@ namespace ProyectoGrafos
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GrafoNator));
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.button2 = new System.Windows.Forms.Button();
@@ -43,7 +44,6 @@ namespace ProyectoGrafos
             this.btnMinimizar = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.button3 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -53,6 +53,9 @@ namespace ProyectoGrafos
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.BtnGrafoAleatorio = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.AcercaDe = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -105,9 +108,9 @@ namespace ProyectoGrafos
             // button2
             // 
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Location = new System.Drawing.Point(10, 299);
+            this.button2.Location = new System.Drawing.Point(16, 299);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(132, 23);
+            this.button2.Size = new System.Drawing.Size(161, 23);
             this.button2.TabIndex = 10;
             this.button2.Text = "Crear Grafo";
             this.button2.UseVisualStyleBackColor = true;
@@ -124,9 +127,9 @@ namespace ProyectoGrafos
             // btnNuevoGrafo
             // 
             this.btnNuevoGrafo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnNuevoGrafo.Location = new System.Drawing.Point(10, 328);
+            this.btnNuevoGrafo.Location = new System.Drawing.Point(17, 328);
             this.btnNuevoGrafo.Name = "btnNuevoGrafo";
-            this.btnNuevoGrafo.Size = new System.Drawing.Size(132, 23);
+            this.btnNuevoGrafo.Size = new System.Drawing.Size(160, 23);
             this.btnNuevoGrafo.TabIndex = 14;
             this.btnNuevoGrafo.Text = "Nuevo Grafo";
             this.btnNuevoGrafo.UseVisualStyleBackColor = true;
@@ -135,7 +138,7 @@ namespace ProyectoGrafos
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.numericUpDown1);
-            this.groupBox2.Location = new System.Drawing.Point(153, 299);
+            this.groupBox2.Location = new System.Drawing.Point(183, 299);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(59, 52);
             this.groupBox2.TabIndex = 15;
@@ -175,6 +178,8 @@ namespace ProyectoGrafos
             // 
             this.btnCerrar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnCerrar.FlatAppearance.BorderSize = 0;
+            this.btnCerrar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.btnCerrar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.btnCerrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCerrar.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCerrar.ForeColor = System.Drawing.Color.White;
@@ -189,6 +194,8 @@ namespace ProyectoGrafos
             // btnMinimizar
             // 
             this.btnMinimizar.FlatAppearance.BorderSize = 0;
+            this.btnMinimizar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.SteelBlue;
+            this.btnMinimizar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightSkyBlue;
             this.btnMinimizar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnMinimizar.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMinimizar.ForeColor = System.Drawing.Color.White;
@@ -204,9 +211,9 @@ namespace ProyectoGrafos
             // button1
             // 
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Location = new System.Drawing.Point(10, 357);
+            this.button1.Location = new System.Drawing.Point(17, 386);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(202, 23);
+            this.button1.Size = new System.Drawing.Size(225, 23);
             this.button1.TabIndex = 21;
             this.button1.Text = "Guardar Grafo";
             this.button1.UseVisualStyleBackColor = true;
@@ -223,16 +230,6 @@ namespace ProyectoGrafos
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Codigo Fuente en GitHub";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel1LinkClicked);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(11, 406);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 23;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // label3
             // 
@@ -324,13 +321,53 @@ namespace ProyectoGrafos
             this.label11.TabIndex = 32;
             this.label11.Text = "H";
             // 
-            // Form1
+            // BtnGrafoAleatorio
+            // 
+            this.BtnGrafoAleatorio.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnGrafoAleatorio.Location = new System.Drawing.Point(17, 357);
+            this.BtnGrafoAleatorio.Name = "BtnGrafoAleatorio";
+            this.BtnGrafoAleatorio.Size = new System.Drawing.Size(225, 23);
+            this.BtnGrafoAleatorio.TabIndex = 33;
+            this.BtnGrafoAleatorio.Text = "Crear Grafo Aleatorio";
+            this.BtnGrafoAleatorio.UseVisualStyleBackColor = true;
+            this.BtnGrafoAleatorio.Click += new System.EventHandler(this.BtnGrafoAleatorioClick);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(17, 415);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(225, 14);
+            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.progressBar1.TabIndex = 34;
+            this.progressBar1.Visible = false;
+            // 
+            // AcercaDe
+            // 
+            this.AcercaDe.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.AcercaDe.FlatAppearance.BorderSize = 0;
+            this.AcercaDe.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkOrange;
+            this.AcercaDe.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Orange;
+            this.AcercaDe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AcercaDe.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AcercaDe.ForeColor = System.Drawing.Color.White;
+            this.AcercaDe.Location = new System.Drawing.Point(793, -7);
+            this.AcercaDe.Name = "AcercaDe";
+            this.AcercaDe.Size = new System.Drawing.Size(42, 39);
+            this.AcercaDe.TabIndex = 35;
+            this.AcercaDe.Text = "?";
+            this.AcercaDe.UseVisualStyleBackColor = true;
+            this.AcercaDe.Click += new System.EventHandler(this.AcercaDe_Click);
+            // 
+            // GrafoNator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaptionText;
             this.ClientSize = new System.Drawing.Size(920, 449);
             this.ControlBox = false;
+            this.Controls.Add(this.AcercaDe);
+            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.BtnGrafoAleatorio);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
@@ -340,7 +377,6 @@ namespace ProyectoGrafos
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.button3);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.btnMinimizar);
@@ -355,7 +391,8 @@ namespace ProyectoGrafos
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ForeColor = System.Drawing.Color.White;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "Form1";
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "GrafoNator";
             this.Text = "Grafonator";
             this.Load += new System.EventHandler(this.Form1_Load_1);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
@@ -383,8 +420,6 @@ namespace ProyectoGrafos
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.LinkLabel linkLabel1;
         partial void Form1Load(object sender, EventArgs e);
-
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
@@ -394,6 +429,9 @@ namespace ProyectoGrafos
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button BtnGrafoAleatorio;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Button AcercaDe;
     }
 }
 
