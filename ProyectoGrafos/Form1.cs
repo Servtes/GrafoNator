@@ -29,8 +29,7 @@ namespace ProyectoGrafos
     {
         #region Declaracion de Variables
 
-        private readonly Random _cantidadAleatoriaNodos = new Random((int)(DateTime.Now.Ticks));
-        private readonly Random  _valorAleatorioCeldas = new Random(((int)DateTime.Now.Ticks));
+        private readonly Random _cantidadAleatoriaNodos = new Random((int) (DateTime.Now.Ticks));
 
         /*Vectores con la lista de coordenadas (x,y) para cada Nodo*/
         //private readonly int[] _ejeX = {99, 452, 99, 452, 208, 328, 208, 328};
@@ -39,9 +38,10 @@ namespace ProyectoGrafos
         private readonly int[] _ejeY = {132, 55, 34, 102, 256, 320, 320, 267};
 
         private readonly int[,] _matriz;
+        private readonly Random _valorAleatorioCeldas = new Random(((int) DateTime.Now.Ticks));
+        private int _cantidadNodos = 1;
         private int _origenX;
         private int _origenY;
-        private int _cantidadNodos = 1;
 
         #endregion
 
@@ -69,6 +69,7 @@ namespace ProyectoGrafos
 
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private static extern void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
+
         //
         // función privada usada para mover el formulario actual
         //
@@ -93,7 +94,6 @@ namespace ProyectoGrafos
 
         #region Funciones del Programa
 
-        
         /// <summary>
         /// Vaciar el panel de elementos
         /// </summary>
@@ -134,6 +134,7 @@ namespace ProyectoGrafos
         }
 
         /*Funcion utilizada para dibujar los bucles*/
+
         private void DibujarArco(float x, float y, float width, float height, float inicio, float curvatura)
         {
             var pen = new Pen(Color.FromArgb(255, 30, 129, 158), 5)
@@ -263,7 +264,7 @@ namespace ProyectoGrafos
             {
                 for (int j = 0; j < _cantidadNodos; j++)
                 {
-                    dataGridView[i, j].Value =Convert.ToString(_valorAleatorioCeldas.Next(0, 2));
+                    dataGridView[i, j].Value = Convert.ToString(_valorAleatorioCeldas.Next(0, 2));
                 }
             }
             for (int i = 0; i < _cantidadNodos; i++)
@@ -307,7 +308,7 @@ namespace ProyectoGrafos
             progressBar1.Minimum = 0;
             progressBar1.Value = 0;
             progressBar1.Step = 1;
-           for (int i = progressBar1.Minimum; i < progressBar1.Maximum; i = i + progressBar1.Step)
+            for (int i = progressBar1.Minimum; i < progressBar1.Maximum; i = i + progressBar1.Step)
             {
                 progressBar1.PerformStep();
             }
@@ -372,10 +373,10 @@ namespace ProyectoGrafos
 
         private void AcercaDe_Click(object sender, EventArgs e)
         {
-            var acercaDe = new AcercaDe { StartPosition = FormStartPosition.Manual};
+            var acercaDe = new AcercaDe {StartPosition = FormStartPosition.Manual};
             acercaDe.Show();
         }
-        
+
         #endregion
     }
 }

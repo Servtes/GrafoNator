@@ -37,15 +37,22 @@ namespace ProyectoGrafos
             {
                 case 0:
                     nodo = new Button
-                               {                                        //Descripcion de las propiedades
-                                   Name = "nodo1",                      //Nombre que tendra el Control
-                                   Size = new Size(45, 45),             //Tamaño en pixeles
-                                   Location = new Point(ejeX, ejeY),    //Posicion en el Panel
-                                   Text = "A",                          //Texto que contendra
-                                   BackColor = Color.Crimson,           //Color del control
-                                   ForeColor = Color.White,             //Color del Texto
+                               {
+                                   //Descripcion de las propiedades
+                                   Name = "nodo1",
+                                   //Nombre que tendra el Control
+                                   Size = new Size(45, 45),
+                                   //Tamaño en pixeles
+                                   Location = new Point(ejeX, ejeY),
+                                   //Posicion en el Panel
+                                   Text = "A",
+                                   //Texto que contendra
+                                   BackColor = Color.Crimson,
+                                   //Color del control
+                                   ForeColor = Color.White,
+                                   //Color del Texto
                                };
-                    nodo.SendToBack();//Pasa al control al fondo de todos los elementos
+                    nodo.SendToBack(); //Pasa al control al fondo de todos los elementos
                     nodo.SendToBack();
                     break;
 

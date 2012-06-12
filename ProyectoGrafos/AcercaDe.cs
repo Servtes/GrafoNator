@@ -18,6 +18,7 @@ namespace ProyectoGrafos
             InitializeComponent();
             MouseMove += Form1MouseMove;
         }
+
         #region Funciones necesarias para mover la ventana sin barra de titulo [Jose Sosa]
 
         //Declaraciones del API de Windows (y constantes usadas para mover el form)
@@ -32,6 +33,7 @@ namespace ProyectoGrafos
 
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private static extern void SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
+
         //
         // función privada usada para mover el formulario actual
         //
@@ -40,12 +42,12 @@ namespace ProyectoGrafos
             ReleaseCapture();
             SendMessage(Handle, WM_SYSCOMMAND, MOUSE_MOVE, 0);
         }
-        
+
         private void Form1MouseMove(object sender, MouseEventArgs e)
         {
             MoverForm();
         }
-        
+
         #endregion
 
         private void AcercaDe_Load(object sender, EventArgs e)
